@@ -43,6 +43,7 @@
 #include "extensions/externalize-string-extension.h"
 #include "extensions/gc-extension.h"
 #include "extensions/statistics-extension.h"
+#include "extensions/rivertrail/rivertrail-extension.h"
 
 namespace v8 {
 namespace internal {
@@ -95,6 +96,7 @@ Handle<String> Bootstrapper::NativesSourceLookup(int index) {
 void Bootstrapper::Initialize(bool create_heap_objects) {
   extensions_cache_.Initialize(create_heap_objects);
   GCExtension::Register();
+  RiverTrailExtension::Register();
   ExternalizeStringExtension::Register();
   StatisticsExtension::Register();
 }
@@ -2035,6 +2037,7 @@ bool Genesis::InstallExtensions(Handle<Context> native_context,
   }
 
   if (FLAG_expose_gc) InstallExtension("v8/gc", &extension_states);
+  if (FLAG_expose_rivertrail) InstallExtension("v8/rivertrail", &extension_states);
   if (FLAG_expose_externalize_string) {
     InstallExtension("v8/externalize", &extension_states);
   }

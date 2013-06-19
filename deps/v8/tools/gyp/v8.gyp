@@ -218,6 +218,7 @@
           },
           'include_dirs+': [
             '../../src',
+            '$(INTELOCLSDKROOT)/include',
           ],
           'sources': [
             '../../src/accessors.cc',
@@ -492,6 +493,26 @@
             '../../src/zone-inl.h',
             '../../src/zone.cc',
             '../../src/zone.h',
+            '../../src/extensions/rivertrail/cContext.cpp',
+            '../../src/extensions/rivertrail/cContext.h',
+            '../../src/extensions/rivertrail/cData.cpp',
+            '../../src/extensions/rivertrail/cData.h',
+            '../../src/extensions/rivertrail/cInterface.cpp',
+            '../../src/extensions/rivertrail/cInterface.h',
+            '../../src/extensions/rivertrail/cKernel.cpp',
+            '../../src/extensions/rivertrail/cKernel.h',
+            '../../src/extensions/rivertrail/config.h',
+            '../../src/extensions/rivertrail/cPlatform.cpp',
+            '../../src/extensions/rivertrail/cPlatform.h',
+            '../../src/extensions/rivertrail/debug.h',
+            '../../src/extensions/rivertrail/opencl_compat.h',
+            '../../src/extensions/rivertrail/rivertrail-extension.cc',
+            '../../src/extensions/rivertrail/rivertrail-extension.h',
+            '../../src/extensions/rivertrail/v8Context.h',
+            '../../src/extensions/rivertrail/v8Data.h',
+            '../../src/extensions/rivertrail/v8Interface.h',
+            '../../src/extensions/rivertrail/v8Kernel.h',
+            '../../src/extensions/rivertrail/v8Platform.h',
           ],
           'conditions': [
             ['want_separate_host_toolset==1', {
@@ -732,6 +753,19 @@
               'msvs_disabled_warnings': [4351, 4355, 4800],
               'link_settings':  {
                 'libraries': [ '-lwinmm.lib', '-lws2_32.lib' ],
+              },
+              'msvs_settings': {
+                'VCCLCompilerTool': {
+                  'WarnAsError': 'false',
+                },
+                'VCLibrarianTool': {
+                  'AdditionalLibraryDirectories': [
+                    '$(INTELOCLSDKROOT)/lib/x86',
+                  ],
+                  'AdditionalDependencies': [
+                    'OpenCL.lib',
+                  ],
+                },
               },
             }],
             ['component=="shared_library"', {
