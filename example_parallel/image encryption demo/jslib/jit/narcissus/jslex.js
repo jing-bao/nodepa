@@ -136,6 +136,15 @@ Narcissus.lexer = (function() {
             for (;;) {
                 var ch = input[this.cursor++];
                 var next = input[this.cursor];
+                 // handle \r, \r\n and (always preferable) \n
+                if (ch === '\r') {
+                    // if the next character is \n, we don't care about this at all
+                    if (next === '\n') continue;
+
+                    // otherwise, we want to consider this as a newline
+                    ch = '\n';
+                }
+
                 if (ch === '\n' && !this.scanNewlines) {
                     this.lineno++;
                 } else if (ch === '/' && next === '*') {
@@ -159,8 +168,14 @@ Narcissus.lexer = (function() {
                     this.cursor++;
                     for (;;) {
                         ch = input[this.cursor++];
+                        next = input[this.cursor];
                         if (ch === undefined)
                             return;
+
+                        if (ch === '\r') {
+                            // check for \r\n
+                            if (next !== '\n') ch = '\n';
+                        }
 
                         if (ch === '\n') {
                             this.lineno++;
@@ -425,7 +440,9 @@ Narcissus.lexer = (function() {
                 this.lexZeroNumber(ch);
             } else if (ch === '"' || ch === "'") {
                 this.lexString(ch);
-            } else if (this.scanNewlines && ch === '\n') {
+            } else if (this.scanNewlines && (ch === '\n' || ch === '\r')) {
+                // if this was a \r, look for \r\n
+                if (ch === '\r' && input[this.cursor] === '\n') this.cursor++;
                 token.type = NEWLINE;
                 token.value = '\n';
                 this.lineno++;
